@@ -1,8 +1,13 @@
-import { Component, OnInit, ChangeDetectionStrategy } from "@angular/core";
+import {
+  Component,
+  OnInit,
+  ChangeDetectionStrategy,
+  OnDestroy,
+} from "@angular/core";
 import { AppointmentService } from "src/app/services/appointment.service";
 import { CalendarView, CalendarEvent } from "angular-calendar";
 import { isSameDay, isSameMonth } from "date-fns";
-import { Subject } from "rxjs";
+import { Subject, Subscription } from "rxjs";
 
 const colors: any = {
   blue: {
@@ -17,7 +22,8 @@ const colors: any = {
   templateUrl: "./appointments.component.html",
   styleUrls: ["./appointments.component.sass"],
 })
-export class AppointmentsComponent implements OnInit {
+export class AppointmentsComponent implements OnInit, OnDestroy {
+  subscription: Subscription;
   view: CalendarView = CalendarView.Month;
   CalendarView = CalendarView;
   viewDate: Date = new Date();
@@ -29,6 +35,19 @@ export class AppointmentsComponent implements OnInit {
   constructor(private appointmentService: AppointmentService) {}
 
   ngOnInit() {
+    this.fetchAppointments();
+    this.subscription = this.appointmentService.$appointmentAdded.subscribe(
+      () => {
+        this.fetchAppointments();
+      }
+    );
+  }
+
+  ngOnDestroy() {
+    this.subscription.unsubscribe();
+  }
+
+  fetchAppointments() {
     this.appointmentService.getAppointments().subscribe((appointments) => {
       this.events = [];
       appointments.forEach((appointment) => {

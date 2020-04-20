@@ -2,6 +2,7 @@ import { Component, OnInit, Inject } from "@angular/core";
 import { MatSnackBar, MatDialogRef, MAT_DIALOG_DATA } from "@angular/material";
 import { Moment } from "moment";
 import { AppointmentService } from "src/app/services/appointment.service";
+import { finalize } from "rxjs/operators";
 
 @Component({
   selector: "app-appointment-dialog",
@@ -38,6 +39,7 @@ export class AppointmentDialogComponent implements OnInit {
         this.model.selectedHour,
         this.doctor
       )
+      .pipe(finalize(() => this.dialogRef.close()))
       .subscribe(
         () => {
           this._snackBar.open("Appointment scheduled successfully", "", {
@@ -48,9 +50,6 @@ export class AppointmentDialogComponent implements OnInit {
           this._snackBar.open("Failure during scheduling process", "", {
             panelClass: ["snack-danger"],
           });
-        },
-        () => {
-          this.dialogRef.close();
         }
       );
   }

@@ -1,7 +1,7 @@
 import { Injectable } from "@angular/core";
 import { AuthProcessService } from "ngx-auth-firebaseui";
-import { Observable, of } from "rxjs";
-import { flatMap, map } from "rxjs/operators";
+import { Observable, of, Subject } from "rxjs";
+import { flatMap, map, tap } from "rxjs/operators";
 import { HttpClient } from "@angular/common/http";
 import { environment } from "src/environments/environment";
 
@@ -10,9 +10,14 @@ import { environment } from "src/environments/environment";
 })
 export class AppointmentService {
   constructor(private auth: AuthProcessService, private http: HttpClient) {}
-  appointments = [];
+
+  private appointmentAdded: Subject<void> = new Subject();
+  public $appointmentAdded: Observable<
+    void
+  > = this.appointmentAdded.asObservable();
+
   scheduleAppointment(
-    date: string,
+    day: string,
     hour: number,
     doctor: DoctorModel
   ): Observable<any> {
@@ -20,10 +25,11 @@ export class AppointmentService {
       flatMap((token) =>
         this.http.post(
           `${environment.apiUrl}/appointments`,
-          { date, hour, doctor },
+          { day, hour, doctor },
           { headers: { Authorization: `Bearer ${token}` } }
         )
-      )
+      ),
+      tap(() => this.appointmentAdded.next())
     );
   }
 
