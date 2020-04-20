@@ -1,0 +1,22 @@
+<div class="page-container">
+  <mat-form-field appearance="outline">
+    <input
+      type="text"
+      matInput
+      placeholder="Search for the doctor's name"
+      [formControl]="search"
+      autofocus
+    />
+  </mat-form-field>
+  <ng-template [ngIf]="filteredDoctors.length > 0" [ngIfElse]="empty">
+    <app-doctor-card
+      (click)="appointmentDialog(doctor)"
+      class="v-margin"
+      *ngFor="let doctor of filteredDoctors"
+      [doctor]="doctor"
+    ></app-doctor-card>
+  </ng-template>
+  <ng-template #empty>
+    <div>No doctor found!</div>
+  </ng-template>
+</div>

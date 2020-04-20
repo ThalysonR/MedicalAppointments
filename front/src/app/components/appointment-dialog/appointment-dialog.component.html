@@ -1,0 +1,41 @@
+<h3>Schedule a New Appointment</h3>
+<div><b>Doctor:</b> {{ doctor.name }}</div>
+<div><b>Speciality: </b> {{ doctor.speciality }}</div>
+<form #appointmentForm="ngForm" (ngSubmit)="scheduleAppointment()">
+  <mat-form-field>
+    <input
+      matInput
+      [matDatepicker]="date"
+      placeholder="Select the date"
+      name="date"
+      required
+      #dateInput="ngModel"
+      [(ngModel)]="model.date"
+      [min]="minDate"
+    />
+    <mat-datepicker-toggle matSuffix [for]="date"></mat-datepicker-toggle>
+    <mat-datepicker #date></mat-datepicker>
+  </mat-form-field>
+  <mat-form-field>
+    <mat-label>Select the hour</mat-label>
+    <mat-select
+      required
+      name="hour"
+      #hour="ngModel"
+      [(ngModel)]="model.selectedHour"
+      [disabled]="!model.date"
+    >
+      <mat-option *ngFor="let hour of hours" [value]="hour">{{
+        hour
+      }}</mat-option>
+    </mat-select>
+  </mat-form-field>
+  <button
+    mat-button
+    type="submit"
+    color="primary"
+    [disabled]="appointmentForm.form.invalid"
+  >
+    Schedule Appointment
+  </button>
+</form>

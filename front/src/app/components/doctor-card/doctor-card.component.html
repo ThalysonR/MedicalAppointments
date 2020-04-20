@@ -1,0 +1,11 @@
+<mat-card class="clickable">
+  <mat-card-header>
+    <mat-card-title>{{ doctor.name | uppercase }}</mat-card-title>
+    <mat-card-subtitle
+      >Speciality: {{ doctor.speciality | uppercase }}</mat-card-subtitle
+    >
+  </mat-card-header>
+  <mat-card-content>
+    <span>{{ doctor.description }}</span>
+  </mat-card-content>
+</mat-card>

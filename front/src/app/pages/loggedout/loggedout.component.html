@@ -1,0 +1,8 @@
+<div style="height: 100%;">
+  <ngx-auth-firebaseui
+    [providers]="[]"
+    [guestEnabled]="false"
+    [messageOnAuthSuccess]="'Signed In Successfully'"
+    (onSuccess)="goToHome()"
+  ></ngx-auth-firebaseui>
+</div>
