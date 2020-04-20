@@ -1,4 +1,4 @@
-# SmartParking
+# MedicalAppointments
 
 ## Descrição do Projeto
 
